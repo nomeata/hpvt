@@ -1,6 +1,7 @@
 import Data.Maybe
 import Data.List
 import qualified Data.Map as M
+import System.Time
 
 import Hackage as H
 import Debian as D
@@ -22,7 +23,8 @@ main = do
 	let combined = mapCombine hackage debian 
 	putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
 
-	let html = outputHTML combined
+	time <- getClockTime
+	let html = outputHTML combined time
 	writeFile "output.html" html
 
 

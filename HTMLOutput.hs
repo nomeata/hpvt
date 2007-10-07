@@ -3,16 +3,21 @@ module HTMLOutput (outputHTML) where
 import Text.XHtml hiding (version)
 import qualified Data.Map as M
 import Data.Maybe
+import System.Time
 
 import Types
 
-outputHTML :: Show k =>  M.Map k (Maybe Version, Maybe Version) -> String
-outputHTML map = showHtml $ page << mkTable map
+outputHTML :: (Show k, Show t) =>  M.Map k (Maybe Version, Maybe Version) -> t -> String
+outputHTML map time = showHtml $ page time << mkTable map
 
 myTitle = "Haskell Package Version Tracker"
 
-page content = thehtml << (header << thetitle << myTitle +++
-			   body << (h1 << myTitle +++ content +++ footer))
+page time content = thehtml << (header << thetitle << myTitle +++
+			   body << (
+			   	h1 << myTitle +++
+			   	p << ("Last update: " +++ show time) +++
+				content +++
+				footer))
 
 mkTable m = table << (
 		tr << (th << "Package" +++ th << "Hackage" +++ th << "Debian") +++
