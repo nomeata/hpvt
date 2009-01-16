@@ -33,4 +33,4 @@ footer = p << ("This is created by " +++
 	       hotlink "http://darcs.nomeata.de/hpvt/" << "hptv" +++
 	       ", written by " +++
 	       hotlink "mailto:mail@joachim-breitner.de" << "Joachim Breitner" +++
-	       ". At the moment it is not updated automatically every night.")
+	       ". At the moment it is updated automatically every night.")
