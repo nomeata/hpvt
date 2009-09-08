@@ -1,3 +1,5 @@
+{-# LANGUAGE PatternGuards #-}
+
 module Debian where
 
 import Debian.Control.ByteString
@@ -17,6 +19,7 @@ findHaskellPackages hackage (Control sources) = map getData . filter isHaskellPa
 		cabalName | Just found <- find ((`M.member` hackage).fromHackage) [
 					package,
 					drop (length "haskell-") package,
+					filter (/= '-') $ drop (length "haskell-") package,
 			  	        reverse $ drop (length "haskell-") $ reverse package
 					]
 					= found
