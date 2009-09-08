@@ -7,6 +7,7 @@ import Hackage as H
 import Debian as D
 
 import HTMLOutput
+import CabalDebianMap
 import Types
 import Utils
 
@@ -24,8 +25,8 @@ main = do
 	putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
 
 	time <- getClockTime
-	let html = outputHTML combined time
-	writeFile "output.html" html
+	writeFile "output.html" $ outputHTML combined time
+	writeFile "cabalDebianMap.txt" $ outputCabalDebianMap combined
 
 
 

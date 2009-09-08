@@ -1,6 +1,6 @@
 module Debian where
 
-import Linspire.Debian.Control.ByteString
+import Debian.Control.ByteString
 import qualified Data.ByteString.Char8 as BS
 
 import Types
