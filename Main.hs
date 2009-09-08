@@ -16,7 +16,7 @@ main = do
 	hackage <- H.readFile "00-index.tar.gz"
 	putStrLn $ "Read " ++ show (M.size hackage) ++ " packages from Hackage"
 
-	debian <- D.readFile "Sources"
+	debian <- D.readFile "Sources" hackage
 	putStrLn $ "Read " ++ show (M.size debian) ++ " packages from Debian"
 
 	
