@@ -38,7 +38,7 @@ mkTable hackage datas = table << (
                         concatHtml (map (\(name,_) ->
                             th << name
                         ) dists) +++
-                        th << " "
+                        th << (spaceHtml +++ spaceHtml +++ spaceHtml +++ spaceHtml +++ spaceHtml)
                     ) datas) +++
                     th << "Hackage"
                 ) +++
