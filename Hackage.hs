@@ -15,4 +15,4 @@ readFile file = do
 	return $ fromListMax hackageVersions
 	   
 extract (p, v, i) = (fromHackage p, Version v url)
-  where url = "http://hackage.haskell.org/cgi-bin/hackage-scripts/package/" ++ p
+  where url = "http://hackage.haskell.org/package/" ++ p
