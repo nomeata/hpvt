@@ -12,4 +12,5 @@ wget -q http://hackage.haskell.org/platform/2010.2.0.0/haskell-platform.cabal -O
 
 ./hpvt >/dev/null
 mv output.html public_html/hackagevsdebian.html
+mv platform.html public_html/platform.html
 mv cabalDebianMap.txt public_html/cabalDebianMap.txt

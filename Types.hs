@@ -1,9 +1,9 @@
-module Types (PackageName, DistroInfo, fromHackage, fromDebian, Version(..)) where
+module Types (PackageName, DistroInfo, fromHackage, fromDebian, fromCabal, Version(..)) where
 
 import Data.Char
 import qualified Data.Map as M
 
-
+import qualified Distribution.Package as D
 
 type DistroInfo = M.Map PackageName Version
 
@@ -26,3 +26,4 @@ instance Show PackageName where
 
 fromHackage = PN
 fromDebian = PN
+fromCabal (D.PackageName n) = PN n
