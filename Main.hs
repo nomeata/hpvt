@@ -17,10 +17,10 @@ main = do
 	hackage <- H.readFile "00-index.tar.gz"
 	putStrLn $ "Read " ++ show (M.size hackage) ++ " packages from Hackage"
 
-	debian_unstable <- D.readFile "Sources.unstable" hackage
+	debian_unstable <- D.readFile "Sources.unstable" "sid" hackage
 	putStrLn $ "Read " ++ show (M.size debian_unstable) ++ " packages from Debian (Unstable)"
 
-	debian_squeeze <- D.readFile "Sources.squeeze" hackage
+	debian_squeeze <- D.readFile "Sources.squeeze" "squeeze" hackage
 	putStrLn $ "Read " ++ show (M.size debian_squeeze) ++ " packages from Debian (Squeeze)"
 
 	
