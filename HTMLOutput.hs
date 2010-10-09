@@ -7,7 +7,7 @@ import System.Time
 
 import Types
 
-outputHTML :: (Show k, Show t) =>  M.Map k (Maybe Version, Maybe Version) -> t -> String
+outputHTML :: (Show k, Show t) =>  M.Map k (Maybe Version, Maybe Version, Maybe Version) -> t -> String
 outputHTML map time = showHtml $ page time << mkTable map
 
 myTitle = "Haskell Package Version Tracker"
@@ -20,12 +20,16 @@ page time content = thehtml << (header << thetitle << myTitle +++
 				footer))
 
 mkTable m = table << (
-		tr << (th << "Package" +++ th << "Hackage" +++ th << "Debian") +++
+		tr << (th << "Package" +++
+                       th << "Hackage" +++
+                       th << "Debian sid" +++
+                       th << "Debian squeeze") +++
 		(concatHtml $ map row $ M.toAscList m)
 		)
-  where	row (pkg,(h,d)) = tr << (td << show pkg +++
+  where	row (pkg,(h,du,ds)) = tr << (td << show pkg +++
 		                  maybe none mkCell h +++
-		                  maybe none mkCell d )
+		                  maybe none mkCell du +++
+                                  maybe none mkCell ds )
 	mkCell (Version v u) = td << hotlink u << v
 	none = td << "–"
 
