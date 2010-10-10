@@ -17,6 +17,7 @@ import Data.Version (showVersion, parseVersion)
 import Text.ParserCombinators.ReadP (readP_to_S, between, eof)
 
 import Types
+import Utils
 
 outputPlatform :: (Show t) => t -> 
  DistroInfo ->
@@ -87,11 +88,10 @@ mkTable hackage datas = table << (
             LT -> "(<)"
             EQ -> "(=)"
             GT -> "(>)"
-            where upstream_version = takeWhile (/= '-') dver
-                  dver' | Just ver' <- fromDotless upstream_version
+            where dver' | Just ver' <- fromDotless (upstream dver)
                             = ver'
                         | otherwise
-                            = parseVersion' upstream_version
+                            = parseVersion' (upstream dver)
 
 fromDotless str =
     if length str == 8 && all isDigit str

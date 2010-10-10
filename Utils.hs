@@ -33,3 +33,8 @@ fromListMax = foldr insert M.empty
         higher v Nothing   = Just v
 	higher v (Just v') = Just (max v v')
 
+upstream :: String -> String
+upstream str = case elemIndices '-' str of
+		[] -> str
+		idx -> take (last idx) str
+ 
