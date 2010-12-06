@@ -38,14 +38,17 @@ readIndex str = do
     catMaybes . Tar.foldEntries extract [] error $ Tar.read $ decompress str
   where extract entry = (:) $ case Tar.entryContent entry of
   	 Tar.NormalFile content _ -> 
-	    case splitDirectories (Tar.entryPath  entry) of
-		[".",pkgname,vers,file] -> do
+	    case splitDirectories' (Tar.entryPath  entry) of
+		[pkgname,vers,file] -> do
 		    let descr = case parsePackageDescription (unpack content) of
 			    ParseOk _ genDescr -> packageDescription genDescr
 			    _  -> error $ "Couldn't read cabal file "++show file
 		    Just (pkgname,vers,descr)
-		_ -> fail "doesn't look like the proper path"
+		_ -> fail $ "doesn't look like the proper path: " ++ Tar.entryPath entry
 	 _ -> Nothing
+        splitDirectories' s = case splitDirectories s of
+            ".":ds -> ds
+            ds -> ds
 
 searchIndex :: (String -> String -> Bool) -> Index -> [PackageDescription]
 searchIndex f ind = map snd $ filter (uncurry f . fst) $ map (\(p,v,d) -> ((p,v),d)) ind
