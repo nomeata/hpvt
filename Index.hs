@@ -34,7 +34,6 @@ readIndex str = do
 
 readIndex :: ByteString -> Index
 readIndex str = do
-    let unziped = decompress str
     catMaybes . Tar.foldEntries extract [] error $ Tar.read $ decompress str
   where extract entry = (:) $ case Tar.entryContent entry of
   	 Tar.NormalFile content _ -> 
