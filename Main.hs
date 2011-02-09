@@ -46,11 +46,12 @@ main = do
 	writeFile "cabalDebianMap.txt" $ outputCabalDebianMap combined
         writeFile "platform.html" $ outputPlatform time hackage [
                 (platform_2010_1_0_0, [
-                    ("Squeeze", debian_squeeze),
-                    ("Unstable", debian_unstable)
+                    ("Squeeze", debian_squeeze)
                 ])
                 , (platform_2010_2_0_0, [])
-                -- , (platform_darcs, [])
+                , (platform_darcs, [
+                    ("Unstable", debian_unstable)
+                ])
             ]
 
 
