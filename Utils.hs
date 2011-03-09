@@ -1,8 +1,13 @@
+{-# LANGUAGE PatternGuards #-}
 module Utils where
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 import Data.List
+import Data.Char
+import qualified Data.Version as DV
+import Data.Version (showVersion, parseVersion)
+import Text.ParserCombinators.ReadP (readP_to_S, between, eof)
 
 isSublistOf []   _   = True
 isSublistOf what l = contains' l
@@ -38,3 +43,20 @@ upstream str = case elemIndices '-' str of
 		[] -> str
 		idx -> take (last idx) str
  
+vCmp ver1 ver2 = toDVer ver1 `compare` toDVer ver2
+
+toDVer ver | Just ver' <- fromDotless (upstream ver) = ver'
+           | otherwise                               = parseVersion' (upstream ver)
+
+
+fromDotless str =
+    if length str == 8 && all isDigit str
+    then Just (DV.Version (map read [take 4 str, take 2 (drop 4 str), drop 6 str]) [])
+    else Nothing
+        
+
+parseVersion' str =
+    case readP_to_S (between (return ()) eof parseVersion) str of
+        [(v,"")] -> v
+        x -> error $ "Could not parse \"" ++ str ++ "\" as a version: " ++ show x
+

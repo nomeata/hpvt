@@ -5,7 +5,6 @@ import Text.XHtml hiding (version)
 import qualified Data.Map as M
 import qualified Data.Set as S
 import Data.Maybe
-import Data.Char
 import System.Time
 
 import Distribution.Package hiding (PackageName)
@@ -14,7 +13,6 @@ import Distribution.Text
 import Distribution.Version (VersionRange(ThisVersion))
 import qualified Data.Version as DV
 import Data.Version (showVersion, parseVersion)
-import Text.ParserCombinators.ReadP (readP_to_S, between, eof)
 
 import Types
 import Utils
@@ -67,7 +65,7 @@ mkTable hackage datas = table << (
                                 concatHtml (map (\(_,dm) -> case M.lookup pkg dm of
                                     Just dver ->
                                         mkCell dver $
-                                            " " +++ vCmp ver dver
+                                            " " +++ showVCmp ver dver
                                     Nothing -> none
                                 ) dists) +++
                                 emptyCell
@@ -84,26 +82,10 @@ mkTable hackage datas = table << (
 	none = td << "–"
         emptyCell = td << noHtml
 
-        vCmp ver (Version dver _) = case dver' `compare` ver of
+        showVCmp ver (Version dver _) = case dver `vCmp` showVersion ver of
             LT -> "(<)"
             EQ -> "(=)"
             GT -> "(>)"
-            where dver' | Just ver' <- fromDotless (upstream dver)
-                            = ver'
-                        | otherwise
-                            = parseVersion' (upstream dver)
-
-fromDotless str =
-    if length str == 8 && all isDigit str
-    then Just (DV.Version (map read [take 4 str, take 2 (drop 4 str), drop 6 str]) [])
-    else Nothing
-        
-
-parseVersion' str =
-    case readP_to_S (between (return ()) eof parseVersion) str of
-        [(v,"")] -> v
-        x -> error $ "Could not parse " ++ str ++ ": " ++ show x
-
 
 footer = p << ("This is created by " +++
 	       hotlink "http://darcs.nomeata.de/hpvt/" << "hptv" +++

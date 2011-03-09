@@ -5,13 +5,15 @@ import qualified Data.Map as M
 
 import qualified Distribution.Package as D
 
+import Utils
+
 type DistroInfo = M.Map PackageName Version
 
 newtype PackageName = PN String
 data Version = Version { version :: String, url :: URL} deriving (Eq)
 
 instance Ord Version where
-	v1 `compare` v2 = version v1 `compare` version v2
+	v1 `compare` v2 = version v1 `vCmp` version v2
 
 type URL = String
 
@@ -27,3 +29,4 @@ instance Show PackageName where
 fromHackage = PN
 fromDebian = PN
 fromCabal (D.PackageName n) = PN n
+
