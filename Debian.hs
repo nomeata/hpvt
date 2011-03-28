@@ -26,7 +26,7 @@ findHaskellPackages codename hackage (Control sources) = map getData . filter is
 		          | otherwise   = package
 		url = "http://packages.debian.org/source/" ++ codename ++ "/" ++ package
 
-  	isHaskellPackage para = maybe False ( ("ghc6" `isSublistOf`) . BS.unpack)
+  	isHaskellPackage para = maybe False ( ("ghc" `isSublistOf`) . BS.unpack)
 						(fieldValue "Build-Depends" para)
 
 
