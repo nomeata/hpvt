@@ -36,6 +36,6 @@ readFile file codename hackage = do
 	sources <- case sourceParse of
 		Left error -> fail (show error)
 		Right source -> return source
-	return $ M.fromList $ findHaskellPackages codename hackage sources
+	return $ M.fromListWith max $ findHaskellPackages codename hackage sources
 
 

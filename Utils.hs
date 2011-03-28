@@ -39,14 +39,22 @@ fromListMax = foldr insert M.empty
 	higher v (Just v') = Just (max v v')
 
 upstream :: String -> String
-upstream str = case elemIndices '-' str of
-		[] -> str
-		idx -> take (last idx) str
+upstream str = case findIndex (`elem` "-+~") str of
+		Nothing -> str
+		Just idx -> take idx str
+
+removeEpoch :: String -> String
+removeEpoch str = case elemIndex ':' str of
+                Nothing -> str
+                Just idx -> drop (idx+1) str
+        
  
 vCmp ver1 ver2 = toDVer ver1 `compare` toDVer ver2
 
-toDVer ver | Just ver' <- fromDotless (upstream ver) = ver'
-           | otherwise                               = parseVersion' (upstream ver)
+toDVer ver | Just ver' <- fromDotless (removeEpoch (upstream ver))
+            = ver'
+           | otherwise
+            = parseVersion' (removeEpoch (upstream ver))
 
 
 fromDotless str =
