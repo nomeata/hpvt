@@ -12,6 +12,11 @@ wget -q http://code.galois.com/darcs/haskell-platform/haskell-platform.cabal -O 
 wget -q http://hackage.haskell.org/platform/2010.1.0.0/haskell-platform.cabal -O -  > haskell-platform-2010.1.0.0.cabal
 #wget -q http://hackage.haskell.org/platform/2010.2.0.0/haskell-platform.cabal -O - > haskell-platform-2010.2.0.0.cabal
 
+if [ $(hostname) = ravel ]
+then
+	export GCONV_PATH=/usr/lib/gconv
+fi
+
 ./hpvt >/dev/null
 mv output.html public_html/hackagevsdebian.html
 mv platform.html public_html/platform.html
