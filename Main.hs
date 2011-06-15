@@ -30,8 +30,11 @@ main = do
 	debian_squeeze <- D.readFile "Sources.squeeze" "squeeze" hackage
 	putStrLn $ "Read " ++ show (M.size debian_squeeze) ++ " packages from Debian (Squeeze)"
 
+	debian_wheezy <- D.readFile "Sources.wheezy" "wheezy" hackage
+	putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
+
         platform_2010_1_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
-        platform_2010_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.2.0.0.cabal"
+--        platform_2010_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.2.0.0.cabal"
         platform_darcs <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-darcs.cabal"
         putStrLn $ "Read platform package descriptions"
 	
@@ -48,8 +51,9 @@ main = do
                 (platform_2010_1_0_0, [
                     ("Squeeze", debian_squeeze)
                 ])
-                , (platform_2010_2_0_0, [])
+--                , (platform_2010_2_0_0, [])
                 , (platform_darcs, [
+                    ("Wheezy", debian_wheezy),
                     ("Unstable", debian_unstable)
                 ])
             ]
