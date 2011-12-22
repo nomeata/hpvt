@@ -34,7 +34,7 @@ main = do
 	putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
 
         platform_2010_1_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
-        platform_2011_2_0_1 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2011.2.0.1.cabal"
+        platform_2011_4_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2011.4.0.0.cabal"
         platform_darcs <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-darcs.cabal"
         putStrLn $ "Read platform package descriptions"
 	
@@ -51,7 +51,7 @@ main = do
                 (platform_2010_1_0_0, [
                     ("Squeeze", debian_squeeze)
                 ])
-                , (platform_2011_2_0_1, [
+                , (platform_2011_4_0_0, [
                     ("Wheezy", debian_wheezy)
                 ])
                 , (platform_darcs, [
