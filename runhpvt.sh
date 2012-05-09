@@ -9,7 +9,7 @@ wget -q http://ftp.debian.org/debian/dists/squeeze/main/source/Sources.bz2 -O - 
 wget -q http://ftp.debian.org/debian/dists/wheezy/main/source/Sources.bz2 -O - | bunzip2 > Sources.wheezy
 #wget -q http://code.galois.com/darcs/haskell-platform/haskell-platform.cabal -O - > haskell-platform-darcs.cabal
 #wget -q http://code.haskell.org/haskell-platform/haskell-platform.cabal -O - > haskell-platform-darcs.cabal
-wget -q https://raw.github.com/haskell/haskell-platform/pre-release/haskell-platform.cabal -O - haskell-platform-darcs.cabal
+wget --no-check-certificate -q https://raw.github.com/haskell/haskell-platform/pre-release/haskell-platform.cabal -O haskell-platform-darcs.cabal
 wget -q http://hackage.haskell.org/platform/2010.1.0.0/haskell-platform.cabal -O -  > haskell-platform-2010.1.0.0.cabal
 #wget -q http://hackage.haskell.org/platform/2010.2.0.0/haskell-platform.cabal -O - > haskell-platform-2010.2.0.0.cabal
 #wget -q http://hackage.haskell.org/platform/2011.4.0.0/haskell-platform.cabal -O - > haskell-platform-2011.4.0.0.cabal
