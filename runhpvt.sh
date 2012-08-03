@@ -11,8 +11,7 @@ wget -q http://ftp.debian.org/debian/dists/wheezy/main/source/Sources.bz2 -O - |
 #wget -q http://code.haskell.org/haskell-platform/haskell-platform.cabal -O - > haskell-platform-darcs.cabal
 wget --no-check-certificate -q https://raw.github.com/haskell/haskell-platform/pre-release/haskell-platform.cabal -O haskell-platform-darcs.cabal
 wget -q http://hackage.haskell.org/platform/2010.1.0.0/haskell-platform.cabal -O -  > haskell-platform-2010.1.0.0.cabal
-#wget -q http://hackage.haskell.org/platform/2010.2.0.0/haskell-platform.cabal -O - > haskell-platform-2010.2.0.0.cabal
-#wget -q http://hackage.haskell.org/platform/2011.4.0.0/haskell-platform.cabal -O - > haskell-platform-2011.4.0.0.cabal
+wget -q http://lambda.haskell.org/platform/download/2012.2.0.0/haskell-platform-2012.2.0.0.tar.gz -O - | tar zOxf - haskell-platform-2012.2.0.0/packages/haskell-platform-2012.2.0.0/haskell-platform.cabal > haskell-platform-2012.2.0.0.cabal
 
 if [ $(hostname) = ravel ]
 then
