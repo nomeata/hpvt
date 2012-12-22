@@ -50,8 +50,8 @@ mkTable hackage datas = table << (
   where buildDependsMap pd = M.fromList (map fromDep deps)
           where fromDep (Dependency pkg (ThisVersion ver)) = (fromCabal pkg,ver)
                 fromDep d = error $ "Unexpected dependency format " ++ display d
-                deps = buildDepends pd ++ buildTools bi
-                bi = libBuildInfo (fromJust (library pd))
+                deps = buildDepends pd ++ tools
+                tools = maybe [] (buildTools . libBuildInfo) (library pd)
         maps = map (\(p,dists) -> (buildDependsMap p,dists)) datas
         pkgs = S.unions (map (M.keysSet . fst) maps)
         

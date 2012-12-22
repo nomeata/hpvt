@@ -33,6 +33,9 @@ main = do
 	debian_wheezy <- D.readFile "Sources.wheezy" "wheezy" hackage
 	putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
 
+	debian_experimental <- D.readFile "Sources.experimental" "experimental" hackage
+	putStrLn $ "Read " ++ show (M.size debian_experimental) ++ " packages from Debian (Wheezy)"
+
         platform_2010_1_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
         platform_2012_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2012.2.0.0.cabal"
         platform_darcs <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-darcs.cabal"
@@ -55,7 +58,8 @@ main = do
                     ("Wheezy", debian_wheezy)
                 ])
                 , (platform_darcs, [
-                    ("Unstable", debian_unstable)
+                    ("Unstable", debian_unstable),
+                    ("Experimental", debian_experimental)
                 ])
             ]
 
