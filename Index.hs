@@ -34,7 +34,7 @@ readIndex str = do
 
 readIndex :: ByteString -> Index
 readIndex str = do
-    catMaybes . Tar.foldEntries extract [] error $ Tar.read $ decompress str
+    catMaybes . Tar.foldEntries extract [] (error.show) $ Tar.read $ decompress str
   where extract entry = (:) $ case Tar.entryContent entry of
   	 Tar.NormalFile content _ -> 
 	    case splitDirectories' (Tar.entryPath  entry) of

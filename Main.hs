@@ -34,16 +34,18 @@ main = do
 	putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
 
 	debian_experimental <- D.readFile "Sources.experimental" "experimental" hackage
-	putStrLn $ "Read " ++ show (M.size debian_experimental) ++ " packages from Debian (Wheezy)"
+	putStrLn $ "Read " ++ show (M.size debian_experimental) ++ " packages from Debian (Experimental)"
 
         platform_2010_1_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
         platform_2012_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2012.2.0.0.cabal"
         platform_darcs <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-darcs.cabal"
         putStrLn $ "Read platform package descriptions"
 	
-	let combined = stopCombine $ startCombine (,,)
+	let combined = stopCombine $ startCombine (,,,,)
                                      `mapCombine` hackage
+                                     `mapCombine` debian_experimental
                                      `mapCombine` debian_unstable
+                                     `mapCombine` debian_wheezy
                                      `mapCombine` debian_squeeze
 	putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
 
