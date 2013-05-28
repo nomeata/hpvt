@@ -7,7 +7,7 @@ import Data.List
 import Data.Char
 import qualified Data.Version as DV
 import Data.Version (showVersion, parseVersion)
-import Text.ParserCombinators.ReadP (readP_to_S, between, eof, optional, string)
+import Text.ParserCombinators.ReadP (readP_to_S, between, eof, optional, string, (+++))
 
 isSublistOf []   _   = True
 isSublistOf what l = contains' l
@@ -64,7 +64,7 @@ fromDotless str =
         
 
 parseVersion' str =
-    case readP_to_S (between (optional (parseVersion >> string ".is.really.")) eof parseVersion) str of
+    case readP_to_S (between (optional (parseVersion >> (string ".is.really." +++ string ".isreally."))) eof parseVersion) str of
         [(v,"")] -> v
         x -> error $ "Could not parse \"" ++ str ++ "\" as a version: " ++ show x
 
