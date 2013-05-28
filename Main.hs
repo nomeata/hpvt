@@ -38,6 +38,7 @@ main = do
 
         platform_2010_1_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
         platform_2012_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2012.2.0.0.cabal"
+        platform_2013_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2013.2.0.0.cabal"
         platform_darcs <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-darcs.cabal"
         putStrLn $ "Read platform package descriptions"
 	
@@ -59,9 +60,11 @@ main = do
                 , (platform_2012_2_0_0, [
                     ("Wheezy", debian_wheezy)
                 ])
-                , (platform_darcs, [
+                , (platform_2013_2_0_0, [
                     ("Unstable", debian_unstable),
                     ("Experimental", debian_experimental)
+                ])
+                , (platform_darcs, [
                 ])
             ]
 
