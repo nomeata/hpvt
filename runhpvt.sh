@@ -8,7 +8,7 @@ wget -q http://hackage.haskell.org/packages/archive/00-index.tar.gz -O 00-index.
 wget -q http://ftp.debian.org/debian/dists/unstable/main/source/Sources.bz2 -O - | bunzip2 > Sources.unstable
 wget -q http://ftp.debian.org/debian/dists/squeeze/main/source/Sources.bz2 -O - | bunzip2 > Sources.squeeze
 wget -q http://ftp.debian.org/debian/dists/wheezy/main/source/Sources.bz2 -O - | bunzip2 > Sources.wheezy
-wget -q http://ftp.debian.org/debian/dists/experimental/main/source/Sources.bz2 -O - | bunzip2 > Sources.experimental
+wget -q http://ftp.debian.org/debian/dists/experimental/main/source/Sources.xz -O - | xzcat > Sources.experimental
 
 #wget -q http://code.galois.com/darcs/haskell-platform/haskell-platform.cabal -O - > haskell-platform-darcs.cabal
 #wget -q http://code.haskell.org/haskell-platform/haskell-platform.cabal -O - > haskell-platform-darcs.cabal
