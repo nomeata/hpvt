@@ -11,13 +11,13 @@ import Utils
 
 
 outputCabalDebianMap :: (Show k) =>  M.Map k (Maybe Version, Maybe Version, Maybe Version, Maybe Version, Maybe Version) ->  String
-outputCabalDebianMap = unlines . mapMaybe toLine . M.toList
+outputCabalDebianMap = init . unlines . mapMaybe toLine . M.toList
   where toLine (pkg,(h,v1,v2,v3,v4)) =
                 if null vs
                 then Nothing
                 else Just (printf "%s,%s,%s"
                         (show (show pkg))
-                        (show (upstream (version dv)))
+                        (show (removeEpoch (upstream (version dv))))
                         (show (url dv)))
             where vs = catMaybes [v1,v2,v3,v4]
                   dv = maximumBy (compare `on` version) vs
