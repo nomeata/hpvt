@@ -51,10 +51,13 @@ removeEpoch str = case elemIndex ':' str of
  
 vCmp ver1 ver2 = toDVer ver1 `compare` toDVer ver2
 
-toDVer ver | Just ver' <- fromDotless (removeEpoch (upstream ver))
+toDVer ver | Just ver' <- fromDotless ver''
             = ver'
            | otherwise
-            = parseVersion' (removeEpoch (upstream ver))
+            = parseVersion' ver''
+  where
+    ver'' = removeEpoch (upstream ver)
+     
 
 
 fromDotless str =
@@ -64,7 +67,10 @@ fromDotless str =
         
 
 parseVersion' str =
-    case readP_to_S (between (optional (parseVersion >> (string ".is.really." +++ string ".isreally."))) eof parseVersion) str of
+    case readP_to_S parser str of
         [(v,"")] -> v
         x -> error $ "Could not parse \"" ++ str ++ "\" as a version: " ++ show x
+  where
+    parser = between (optional (parseVersion >> really)) eof parseVersion
+    really = string ".is.really." +++ string ".isreally." +++ string ".really."
 
