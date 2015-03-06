@@ -23,7 +23,7 @@ then
 fi
 
 ./hpvt >/dev/null
-curl --show-error --silent -X PUT -H "Content-type: text/csv" --data-binary '@cabalDebianMap.txt' http://hackage.haskell.org/distro/Debian/packages | grep -v Ok
 mv output.html public_html/hackagevsdebian.html
 mv platform.html public_html/platform.html
+curl --digest --netrc-file hackage-netrec --show-error --silent -X PUT -H "Content-type: text/csv" --data-binary '@cabalDebianMap.txt' http://hackage.haskell.org/distro/Debian/packages | grep -q Ok
 # mv cabalDebianMap.txt public_html/cabalDebianMap.txt
