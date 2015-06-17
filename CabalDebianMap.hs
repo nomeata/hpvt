@@ -20,4 +20,4 @@ outputCabalDebianMap = init . unlines . mapMaybe toLine . M.toList
                         (show (removeEpoch (upstream (version dv))))
                         (show (url dv)))
             where vs = catMaybes [v1,v2,v3,v4]
-                  dv = maximumBy (compare `on` version) vs
+                  dv = maximum vs
