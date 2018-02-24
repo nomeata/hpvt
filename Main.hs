@@ -18,44 +18,44 @@ import Types
 import Utils
 
 
-main = do 
-	putStrLn "Haskell Package Version Tracker"
+main = do
+        putStrLn "Haskell Package Version Tracker"
 
-	hackage <- H.readFile "00-index.tar.gz"
-	putStrLn $ "Read " ++ show (M.size hackage) ++ " packages from Hackage"
+        hackage <- H.readFile "00-index.tar.gz"
+        putStrLn $ "Read " ++ show (M.size hackage) ++ " packages from Hackage"
 
-	debian_unstable <- D.readFile "Sources.unstable" "sid" hackage
-	putStrLn $ "Read " ++ show (M.size debian_unstable) ++ " packages from Debian (Unstable)"
+        debian_unstable <- D.readFile "Sources.unstable" "sid" hackage
+        putStrLn $ "Read " ++ show (M.size debian_unstable) ++ " packages from Debian (Unstable)"
 
-	-- debian_squeeze <- D.readFile "Sources.squeeze" "squeeze" hackage
-	-- putStrLn $ "Read " ++ show (M.size debian_squeeze) ++ " packages from Debian (Squeeze)"
+        -- debian_squeeze <- D.readFile "Sources.squeeze" "squeeze" hackage
+        -- putStrLn $ "Read " ++ show (M.size debian_squeeze) ++ " packages from Debian (Squeeze)"
 
-	debian_wheezy <- D.readFile "Sources.wheezy" "wheezy" hackage
-	putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
+        debian_wheezy <- D.readFile "Sources.wheezy" "wheezy" hackage
+        putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
 
-	debian_jessie <- D.readFile "Sources.jessie" "jessie" hackage
-	putStrLn $ "Read " ++ show (M.size debian_jessie) ++ " packages from Debian (jessie)"
+        debian_jessie <- D.readFile "Sources.jessie" "jessie" hackage
+        putStrLn $ "Read " ++ show (M.size debian_jessie) ++ " packages from Debian (jessie)"
 
-	debian_experimental <- D.readFile "Sources.experimental" "experimental" hackage
-	putStrLn $ "Read " ++ show (M.size debian_experimental) ++ " packages from Debian (Experimental)"
+        debian_experimental <- D.readFile "Sources.experimental" "experimental" hackage
+        putStrLn $ "Read " ++ show (M.size debian_experimental) ++ " packages from Debian (Experimental)"
 
-        platform_2010_1_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
-        platform_2012_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2012.2.0.0.cabal"
-        platform_2013_2_0_0 <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-2013.2.0.0.cabal"
-        platform_darcs <- flattenPackageDescription <$> readPackageDescription normal "haskell-platform-darcs.cabal"
-        putStrLn $ "Read platform package descriptions"
-	
-	let combined = stopCombine $ startCombine (,,,,)
+        platform_2010_1_0_0 <- flattenPackageDescription <$> readGenericPackageDescription normal "haskell-platform-2010.1.0.0.cabal"
+        platform_2012_2_0_0 <- flattenPackageDescription <$> readGenericPackageDescription normal "haskell-platform-2012.2.0.0.cabal"
+        platform_2013_2_0_0 <- flattenPackageDescription <$> readGenericPackageDescription normal "haskell-platform-2013.2.0.0.cabal"
+        platform_darcs <- flattenPackageDescription <$> readGenericPackageDescription normal "haskell-platform-darcs.cabal"
+        putStrLn "Read platform package descriptions"
+
+        let combined = stopCombine $ startCombine (,,,,)
                                      `mapCombine` hackage
                                      `mapCombine` debian_experimental
                                      `mapCombine` debian_unstable
                                      `mapCombine` debian_jessie
                                      `mapCombine` debian_wheezy
-	putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
+        putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
 
-	time <- getClockTime
-	writeFile "output.html" $ outputHTML combined time
-	writeFile "cabalDebianMap.txt" $ outputCabalDebianMap combined
+        time <- getClockTime
+        writeFile "output.html" $ outputHTML combined time
+        writeFile "cabalDebianMap.txt" $ outputCabalDebianMap combined
         writeFile "platform.html" $ outputPlatform time hackage [
                 --(platform_2010_1_0_0, [
                 --    ("Squeeze", debian_squeeze)

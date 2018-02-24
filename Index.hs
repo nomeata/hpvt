@@ -1,8 +1,10 @@
+{-# LANGUAGE ViewPatterns #-}
 module Index where
 
 import qualified Data.Set as Set
 import qualified Data.Map as Map
-import Data.Version (Version,parseVersion)
+import Distribution.Text (simpleParse)
+import Distribution.Version (Version)
 import Codec.Compression.GZip(decompress)
 import Data.ByteString.Lazy.Char8(ByteString,unpack)
 import qualified Codec.Archive.Tar as Tar
@@ -33,18 +35,18 @@ readIndex str = do
 -}
 
 readIndex :: ByteString -> Index
-readIndex str = do
+readIndex str =
     catMaybes . Tar.foldEntries extract [] (error.show) $ Tar.read $ decompress str
   where extract entry = (:) $ case Tar.entryContent entry of
-  	 Tar.NormalFile content _ -> 
-	    case splitDirectories' (Tar.entryPath  entry) of
-		[pkgname,vers,file] -> do
-		    let descr = case parsePackageDescription (unpack content) of
-			    ParseOk _ genDescr -> packageDescription genDescr
-			    _  -> error $ "Couldn't read cabal file "++show file
-		    Just (pkgname,vers,descr)
-		_ -> fail $ "doesn't look like the proper path: " ++ Tar.entryPath entry
-	 _ -> Nothing
+         Tar.NormalFile content _ ->
+            case splitDirectories' (Tar.entryPath  entry) of
+                [pkgname,vers,file] -> do
+                    let descr = case parseGenericPackageDescription (unpack content) of
+                            ParseOk _ genDescr -> packageDescription genDescr
+                            _  -> error $ "Couldn't read cabal file "++show file
+                    Just (pkgname,vers,descr)
+                _ -> fail $ "doesn't look like the proper path: " ++ Tar.entryPath entry
+         _ -> Nothing
         splitDirectories' s = case splitDirectories s of
             ".":ds -> ds
             ds -> ds
@@ -53,15 +55,15 @@ searchIndex :: (String -> String -> Bool) -> Index -> [PackageDescription]
 searchIndex f ind = map snd $ filter (uncurry f . fst) $ map (\(p,v,d) -> ((p,v),d)) ind
 
 indexMapFromList :: [PackageIdentifier] -> IndexMap
-indexMapFromList pids = Map.unionsWith Set.union $
+indexMapFromList pids = Map.unionsWith Set.union
     [ Map.singleton name (Set.singleton vers)
-    | (PackageIdentifier {pkgName = PackageName name,pkgVersion = vers}) <- pids ]
+    | PackageIdentifier {pkgName = (unPackageName -> name),pkgVersion = vers} <- pids ]
 
 indexToPackageIdentifier :: Index -> [PackageIdentifier]
 indexToPackageIdentifier index = do
     (name,vers_str,_) <- index
-    Just vers <- return $ readPMaybe parseVersion vers_str
-    return $ PackageIdentifier {pkgName = PackageName name,pkgVersion = vers}
+    Just vers <- return $ simpleParse vers_str
+    return $ PackageIdentifier {pkgName = mkPackageName name,pkgVersion = vers}
 
 bestVersions :: IndexMap -> Map.Map String Version
 bestVersions = Map.map Set.findMax

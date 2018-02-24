@@ -7,7 +7,7 @@ import Data.List
 import Data.Char
 import qualified Data.Version as DV
 import Data.Version (showVersion, parseVersion)
-import Text.ParserCombinators.ReadP (readP_to_S, between, eof, optional, string, (+++))
+import Text.ParserCombinators.ReadP (readP_to_S, between, eof, optional, string, (+++), many1, satisfy)
 
 isSublistOf []   _   = True
 isSublistOf what l = contains' l
@@ -36,19 +36,19 @@ fromListMax :: (Ord k, Ord a) => [(k,a)] -> M.Map k a
 fromListMax = foldr insert M.empty
   where insert (k,v) = M.alter (higher v) k
         higher v Nothing   = Just v
-	higher v (Just v') = Just (max v v')
+        higher v (Just v') = Just (max v v')
 
 upstream :: String -> String
 upstream str = case findIndex (`elem` "-+~") str of
-		Nothing -> str
-		Just idx -> take idx str
+                Nothing -> str
+                Just idx -> take idx str
 
 removeEpoch :: String -> String
 removeEpoch str = case elemIndex ':' str of
                 Nothing -> str
                 Just idx -> drop (idx+1) str
-        
- 
+
+
 vCmp ver1 ver2 = toDVer ver1 `compare` toDVer ver2
 
 toDVer ver | Just ver' <- fromDotless ver''
@@ -57,20 +57,21 @@ toDVer ver | Just ver' <- fromDotless ver''
             = parseVersion' ver''
   where
     ver'' = removeEpoch (upstream ver)
-     
+
 
 
 fromDotless str =
     if length str == 8 && all isDigit str
     then Just (DV.Version (map read [take 4 str, take 2 (drop 4 str), drop 6 str]) [])
     else Nothing
-        
+
 
 parseVersion' str =
     case readP_to_S parser str of
         [(v,"")] -> v
         x -> error $ "Could not parse \"" ++ str ++ "\" as a version: " ++ show x
   where
-    parser = between (optional (parseVersion >> really)) eof parseVersion
+    parser = between (optional (parseVersion >> really)) (optional gitVersion >> eof) parseVersion
     really = string ".is.really." +++ string ".isreally." +++ string ".really."
-
+    -- for esqueleto
+    gitVersion = string ".git" >> many1 (satisfy isDigit)

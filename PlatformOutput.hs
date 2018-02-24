@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternGuards #-}
 module PlatformOutput (outputPlatform) where
 
 import Text.XHtml hiding (version)
@@ -9,10 +8,10 @@ import System.Time
 
 import Distribution.Package hiding (PackageName)
 import Distribution.PackageDescription
+import Distribution.Types.LegacyExeDependency
 import Distribution.Text
 import Distribution.Version (VersionRange(ThisVersion))
-import qualified Data.Version as DV
-import Data.Version (showVersion, parseVersion)
+import qualified Distribution.Version as DV
 
 import Types
 import Utils
@@ -26,14 +25,14 @@ outputPlatform time hackage datas = showHtml $ page time << mkTable hackage data
 myTitle = "Haskell Platform Version Tracker"
 
 page time content = thehtml << (header << thetitle << myTitle +++
-			   body << (
-			   	h1 << myTitle +++
-			   	p << ("Last update: " +++ show time) +++
-				content +++
-				footer))
+                           body << (
+                                h1 << myTitle +++
+                                p << ("Last update: " +++ show time) +++
+                                content +++
+                                footer))
 
 mkTable hackage datas = table << (
-		tr << (
+                tr << (
                     th << "Package name" +++
                     concatHtml (map (\(p,dists) ->
                         th << (display (pkgName (package p)) +++ br +++
@@ -45,13 +44,14 @@ mkTable hackage datas = table << (
                     ) datas) +++
                     th << "Hackage"
                 ) +++
-		(concatHtml $ map row $ S.toList pkgs)
-		)
-  where buildDependsMap pd = M.fromList (map fromDep deps)
+                (concatHtml $ map row $ S.toList pkgs)
+                )
+  where buildDependsMap pd = M.fromList $ map fromDep (buildDepends pd) ++ map fromToolDep tools
           where fromDep (Dependency pkg (ThisVersion ver)) = (fromCabal pkg,ver)
                 fromDep d = error $ "Unexpected dependency format " ++ display d
-                deps = buildDepends pd ++ tools
                 tools = maybe [] (buildTools . libBuildInfo) (library pd)
+                fromToolDep (LegacyExeDependency pkg (ThisVersion ver)) = (fromString pkg,ver)
+                fromToolDep d = error $ "Unexpected dependency format " ++ display d
         maps = map (\(p,dists) -> (buildDependsMap p,dists)) datas
         pkgs = S.unions (map (M.keysSet . fst) maps)
         
@@ -61,7 +61,7 @@ mkTable hackage datas = table << (
                       concatHtml (map (\(pm,dists) ->
                         case M.lookup pkg pm of
                             Just ver -> 
-                                td << showVersion ver +++
+                                td << display ver +++
                                 concatHtml (map (\(_,dm) -> case M.lookup pkg dm of
                                     Just dver ->
                                         mkCell dver $
@@ -79,16 +79,16 @@ mkTable hackage datas = table << (
                         Nothing -> none
                   )
         mkCell (Version v u) more = td << (hotlink u << v +++ more)
-	none = td << "–"
+        none = td << "–"
         emptyCell = td << noHtml
 
-        showVCmp ver (Version dver _) = case dver `vCmp` showVersion ver of
+        showVCmp ver (Version dver _) = case dver `vCmp` display ver of
             LT -> "(<)"
             EQ -> "(=)"
             GT -> "(>)"
 
 footer = p << ("This is created by " +++
-	       hotlink "http://darcs.nomeata.de/hpvt/" << "hptv" +++
-	       ", written by " +++
-	       hotlink "mailto:mail@joachim-breitner.de" << "Joachim Breitner" +++
-	       ". At the moment it is updated automatically every night.")
+               hotlink "http://darcs.nomeata.de/hpvt/" << "hptv" +++
+               ", written by " +++
+               hotlink "mailto:mail@joachim-breitner.de" << "Joachim Breitner" +++
+               ". At the moment it is updated automatically every night.")
