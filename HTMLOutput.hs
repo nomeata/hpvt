@@ -3,7 +3,7 @@ module HTMLOutput (outputHTML) where
 import Text.XHtml
 import qualified Data.Map as M
 import Data.Maybe
-import System.Time
+import Data.Time
 
 import Types
 

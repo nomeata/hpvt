@@ -1,10 +1,10 @@
 import Data.Maybe
 import Data.List
 import qualified Data.Map as M
-import System.Time
+import Data.Time
 import Control.Applicative ((<$>))
 
-import Distribution.PackageDescription.Parse
+import Distribution.PackageDescription.Parsec
 import Distribution.PackageDescription.Configuration
 import Distribution.Verbosity
 
@@ -53,7 +53,7 @@ main = do
                                      `mapCombine` debian_wheezy
         putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
 
-        time <- getClockTime
+        time <- getCurrentTime
         writeFile "output.html" $ outputHTML combined time
         writeFile "cabalDebianMap.txt" $ outputCabalDebianMap combined
         writeFile "platform.html" $ outputPlatform time hackage [

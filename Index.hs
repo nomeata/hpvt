@@ -6,11 +6,11 @@ import qualified Data.Map as Map
 import Distribution.Text (simpleParse)
 import Distribution.Version (Version)
 import Codec.Compression.GZip(decompress)
-import Data.ByteString.Lazy.Char8(ByteString,unpack)
+import Data.ByteString.Lazy.Char8(ByteString,toStrict)
 import qualified Codec.Archive.Tar as Tar
 import qualified Codec.Archive.Tar.Entry as Tar
 import Distribution.PackageDescription
-import Distribution.PackageDescription.Parse
+import Distribution.PackageDescription.Parsec
 import Distribution.Package
 import System.FilePath.Posix
 import MaybeRead (readPMaybe)
@@ -41,9 +41,9 @@ readIndex str =
          Tar.NormalFile content _ ->
             case splitDirectories' (Tar.entryPath  entry) of
                 [pkgname,vers,file] -> do
-                    let descr = case parseGenericPackageDescription (unpack content) of
-                            ParseOk _ genDescr -> packageDescription genDescr
-                            _  -> error $ "Couldn't read cabal file "++show file
+                    let descr = case parseGenericPackageDescriptionMaybe (toStrict content) of
+                            Just genDescr -> packageDescription genDescr
+                            Nothing -> error $ "Couldn't read cabal file "++show file
                     Just (pkgname,vers,descr)
                 _ -> fail $ "doesn't look like the proper path: " ++ Tar.entryPath entry
          _ -> Nothing
