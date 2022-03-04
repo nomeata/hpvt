@@ -12,7 +12,10 @@ outputHTML map time = showHtml $ page time << mkTable map
 
 myTitle = "Haskell Package Version Tracker"
 
-page time content = thehtml << (header << thetitle << myTitle +++
+page time content = thehtml << (header << (
+                                   thetitle << myTitle +++
+                                   style << "html {font-family: 'Lato', sans-serif;}"
+                                   ) +++
                            body << (
                                 h1 << myTitle +++
                                 p << ("Last update: " +++ show time) +++
