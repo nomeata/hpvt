@@ -30,11 +30,11 @@ main = do
         -- debian_squeeze <- D.readFile "Sources.squeeze" "squeeze" hackage
         -- putStrLn $ "Read " ++ show (M.size debian_squeeze) ++ " packages from Debian (Squeeze)"
 
-        debian_wheezy <- D.readFile "Sources.wheezy" "wheezy" hackage
-        putStrLn $ "Read " ++ show (M.size debian_wheezy) ++ " packages from Debian (Wheezy)"
+        debian_bullseye <- D.readFile "Sources.bullseye" "bullseye" hackage
+        putStrLn $ "Read " ++ show (M.size debian_bullseye) ++ " packages from Debian (bullseye)"
 
-        debian_jessie <- D.readFile "Sources.jessie" "jessie" hackage
-        putStrLn $ "Read " ++ show (M.size debian_jessie) ++ " packages from Debian (jessie)"
+        debian_bookworm <- D.readFile "Sources.bookworm" "bookworm" hackage
+        putStrLn $ "Read " ++ show (M.size debian_bookworm) ++ " packages from Debian (bookworm)"
 
         debian_experimental <- D.readFile "Sources.experimental" "experimental" hackage
         putStrLn $ "Read " ++ show (M.size debian_experimental) ++ " packages from Debian (Experimental)"
@@ -49,8 +49,8 @@ main = do
                                      `mapCombine` hackage
                                      `mapCombine` debian_experimental
                                      `mapCombine` debian_unstable
-                                     `mapCombine` debian_jessie
-                                     `mapCombine` debian_wheezy
+                                     `mapCombine` debian_bookworm
+                                     `mapCombine` debian_bullseye
         putStrLn $ "Found " ++ show (M.size combined) ++ " total packages"
 
         time <- getCurrentTime

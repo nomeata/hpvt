@@ -22,10 +22,10 @@ page time content = thehtml << (header << thetitle << myTitle +++
 mkTable m = table << (
                 tr << (th << "Package" +++
                        th << "Hackage" +++
-                       th << "Debian experimental" +++
-                       th << "Debian sid" +++
-                       th << "Debian jessie" +++
-                       th << "Debian wheezy") +++ 
+                       th << "experimental" +++
+                       th << "sid" +++
+                       th << "bookworm (12)" +++
+                       th << "bullseye (11)") +++
                 (concatHtml $ map row $ M.toAscList m)
                 )
   where row (pkg,(h,de,du,dj,dw)) = tr << (td << show pkg +++
