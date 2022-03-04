@@ -18,6 +18,6 @@ wget -q http://ftp.debian.org/debian/dists/experimental/main/source/Sources.xz -
 
 ./hpvt >/dev/null
 mv output.html public_html/hackagevsdebian.html
-mv platform.html public_html/platform.html
 curl --digest --netrc-file hackage-netrec --show-error --silent -X PUT -H "Content-type: text/csv" --data-binary '@cabalDebianMap.txt' http://hackage.haskell.org/distro/Debian/packages | grep -q Ok
+#mv platform.html public_html/platform.html
 # mv cabalDebianMap.txt public_html/cabalDebianMap.txt
