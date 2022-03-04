@@ -16,8 +16,8 @@ wget -q http://ftp.debian.org/debian/dists/experimental/main/source/Sources.xz -
 #wget -q http://hackage.haskell.org/platform/2010.1.0.0/haskell-platform.cabal -O -  > haskell-platform-2010.1.0.0.cabal
 #wget -q http://lambda.haskell.org/platform/download/2012.2.0.0/haskell-platform-2012.2.0.0.tar.gz -O - | tar zOxf - haskell-platform-2012.2.0.0/packages/haskell-platform-2012.2.0.0/haskell-platform.cabal > haskell-platform-2012.2.0.0.cabal
 
-./hpvt >/dev/null
 mv output.html public_html/hackagevsdebian.html
 curl --digest --netrc-file hackage-netrec --show-error --silent -X PUT -H "Content-type: text/csv" --data-binary '@cabalDebianMap.txt' http://hackage.haskell.org/distro/Debian/packages | grep -q Ok
+hpvt >/dev/null
 #mv platform.html public_html/platform.html
 # mv cabalDebianMap.txt public_html/cabalDebianMap.txt

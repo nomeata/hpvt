@@ -1,0 +1,36 @@
+cabal-version: 3.0
+name:          hpvt
+version:       0.1.0
+description:   Debian's Hackage version tracker
+license:       AGPL-3.0-or-later
+license-file:  COPYING
+homepage:      https://github.com/nomeata/hpvt
+author:        Joachim Breitner
+maintainer:    mail@joachim-breitner.de
+build-type:    Simple
+
+executable hpvt
+  main-is:          Main.hs
+  other-modules:
+    CabalDebianMap
+    Debian
+    Hackage
+    HTMLOutput
+    Index
+    MaybeRead
+    Types
+    Utils
+
+  build-depends:
+    , base                  >=4.5
+    , bytestring
+    , Cabal
+    , containers
+    , debian
+    , filepath
+    , tar
+    , time
+    , xhtml
+    , zlib
+
+  default-language: Haskell2010
